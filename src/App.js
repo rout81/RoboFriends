@@ -1,7 +1,10 @@
 import React, { Component } from "react";
+import {connect} from 'react-redux';
 import Cardlist from "./Cardlist";
 import Searchbox from "./Searchbox";
 import ErrorCardlist from './ErrorCardlist';
+import {setSearchField} from './actions';
+
 
 class App extends Component {
   constructor() {
@@ -47,4 +50,4 @@ class App extends Component {
   }
 }
 
-export default App;
+export default connect()(App);
