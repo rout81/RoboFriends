@@ -1,17 +1,25 @@
 import React, { Component } from "react";
-import {connect} from 'react-redux';
+import { connect } from "react-redux";
 import Cardlist from "./Cardlist";
 import Searchbox from "./Searchbox";
-import ErrorCardlist from './ErrorCardlist';
-import {setSearchField} from './actions';
+import ErrorCardlist from "./ErrorCardlist";
+import { setSearchField } from "./actions";
 
+const mapStateToProps = (state) => {
+  return { searchField: state.searchField };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    onSearchChange: (event) => dispatch(setSearchField(event.target.value)),
+  };
+};
 
 class App extends Component {
   constructor() {
     super();
     this.state = {
       robots: [],
-      searchField: ""
     };
   }
 
@@ -23,31 +31,27 @@ class App extends Component {
       });
   }
 
-  onSearchChange = (e) => {
-    this.setState({searchField: e.target.value})
-  }
-
   render() {
-    const {robots, searchField} = this.state;
-    const Filtered = robots.filter(robot => {
-      return robot.name.toLowerCase().includes(searchField.toLowerCase())
+    const { robots } = this.state;
+    const { searchField, onSearchChange } = this.props;
+    const Filtered = robots.filter((robot) => {
+      return robot.name.toLowerCase().includes(searchField.toLowerCase());
     });
 
     if (robots.length === 0) {
-      return <h1>Loading...</h1>
+      return <h1>Loading...</h1>;
     } else {
       return (
-        <div className="tc bg-light-green">
+        <div className="tc bg">
           <h1 className="ma0 pa3">Robofriends</h1>
-          <Searchbox searchChange={this.onSearchChange}/>
+          <Searchbox searchChange={onSearchChange} />
           <ErrorCardlist>
             <Cardlist robots={Filtered} />
           </ErrorCardlist>
         </div>
       );
     }
-    
   }
 }
 
-export default connect()(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
